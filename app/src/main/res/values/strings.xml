@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RestServer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="local_service_started">NanoHttpdService Started</string>
+    <string name="notification_title">REST Server</string>
+    <string name="notification_running_desc">Service is running</string>
+
+</resources>
