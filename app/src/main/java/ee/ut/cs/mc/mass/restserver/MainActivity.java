@@ -102,9 +102,6 @@ public class MainActivity extends ActionBarActivity {
         public void onReceive(Context arg0, Intent arg1) {
             String datapassed = arg1.getStringExtra("MESSAGE");
 
-            Toast.makeText(MainActivity.this,
-                    "Web Server started!",
-                    Toast.LENGTH_LONG).show();
             TextView textIpaddr = (TextView) findViewById(R.id.textView);
             textIpaddr.setText(datapassed);
         }
