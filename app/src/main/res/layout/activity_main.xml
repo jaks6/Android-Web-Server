@@ -9,23 +9,55 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Start NanoHttpd Service"
-        android:id="@+id/button_start_service"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:onClick = "buttonStartServiceClicked"/>
+        android:id="@+id/relativeLayoutWebServer">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop NanoHttpd Service"
-        android:id="@+id/button_stop_service"
-        android:layout_below="@+id/button_start_service"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:onClick = "buttonStopServiceClicked"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start NanoHttpd Service"
+            android:id="@+id/button_start_service"
+            android:onClick = "buttonStartServiceClicked"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop NanoHttpd Service"
+            android:id="@+id/button_stop_service"
+            android:onClick = "buttonStopServiceClicked"
+            android:layout_below="@+id/button_start_service"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/relativeLayoutWebServer">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start BLE advertising"
+            android:id="@+id/btn_ble_start"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:onClick = "buttonStartBleAdvertisingClicked"
+            android:layout_marginTop="18dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop BLE advertising"
+            android:id="@+id/btn_ble_stop"
+            android:layout_below="@+id/btn_ble_start"
+            android:onClick = "buttonStopBleAdvertisingClicked"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

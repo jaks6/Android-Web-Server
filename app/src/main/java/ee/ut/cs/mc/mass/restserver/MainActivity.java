@@ -1,5 +1,6 @@
 package ee.ut.cs.mc.mass.restserver;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +13,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ee.ut.cs.mc.mass.restserver.ble.BleAdvertisementService;
+
 
 public class MainActivity extends ActionBarActivity {
 
     /** Web Server port */
     public static final int PORT = 8765;
+    private static final int REQUEST_ENABLE_BT = 1;
 
     WebServerReceiver webServerReceiver;
+    BleReceiver bleReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +35,24 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
 
-        //Register BroadcastReceiver
-        //to receive event from our service
+        //Register BroadcastReceivers
+        //to receive events from our services
+        setUpBroadcastReceivers();
+    }
+
+    private void setUpBroadcastReceivers() {
         webServerReceiver = new WebServerReceiver();
+        bleReceiver = new BleReceiver();
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NanoHttpdService.ACTION_UI_MSG);
         registerReceiver(webServerReceiver, intentFilter);
+
+        IntentFilter intentFilterBle = new IntentFilter();
+        intentFilterBle.addAction(BleAdvertisementService.ACTION_BT_DISABLED);
+        intentFilterBle.addAction(BleAdvertisementService.ACTION_BT_ADVERTISING_START);
+        registerReceiver(bleReceiver,intentFilterBle);
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,6 +87,16 @@ public class MainActivity extends ActionBarActivity {
         stopService(intent);
     }
 
+    public void buttonStartBleAdvertisingClicked(View v){
+        Intent intent = new Intent(this, BleAdvertisementService.class);
+        startService(intent);
+    }
+
+    public void buttonStopBleAdvertisingClicked(View v){
+        Intent intent = new Intent(this, BleAdvertisementService.class);
+        stopService(intent);
+    }
+
     private class WebServerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
@@ -84,6 +107,29 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_LONG).show();
             TextView textIpaddr = (TextView) findViewById(R.id.textView);
             textIpaddr.setText(datapassed);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(bleReceiver);
+        unregisterReceiver(webServerReceiver);
+    }
+
+    private class BleReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            String broadcastAction = arg1.getAction();
+
+            if (broadcastAction.equals(BleAdvertisementService.ACTION_BT_ADVERTISING_START)){
+                Toast.makeText(MainActivity.this, "BLE advertising started", Toast.LENGTH_LONG).show();
+
+            } else if (broadcastAction.equals(BleAdvertisementService.ACTION_BT_DISABLED)){
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+            }
         }
     }
 }
