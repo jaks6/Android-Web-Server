@@ -7,13 +7,12 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import ee.ut.cs.mc.mass.restserver.MainActivity;
-import ee.ut.cs.mc.mass.restserver.Util;
+import java.io.IOException;
 
-public class BleAdvertisementService extends Service {
-    private static final String TAG = BleAdvertisementService.class.getName();
+public class BluetoothServerService extends Service {
+    private static final String TAG = BluetoothServerService.class.getName();
     public final static String ACTION_BT_DISABLED = "BT_DISABLED";
-    public final static String ACTION_BT_ADVERTISING_START = "BT_ADVERTISING_START";
+    public final static String ACTION_BT_LISTENING_START = "BT_ADVERTISING_START";
 
     BluetoothController mBluetoothController;
 
@@ -28,7 +27,7 @@ public class BleAdvertisementService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Received start id " + startId + ": " + intent);
-        new BleAdvertisementThread(this).start();
+        new BtServerThread(this).start();
 
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -36,9 +35,9 @@ public class BleAdvertisementService extends Service {
     }
 
     /** Thread on which the NanoHttpd Server runs */
-    private class BleAdvertisementThread extends Thread{
+    private class BtServerThread extends Thread{
         Context context;
-        BleAdvertisementThread(Context ctx){
+        BtServerThread(Context ctx){
             this.context = ctx;
         }
         @Override
@@ -52,10 +51,13 @@ public class BleAdvertisementService extends Service {
             } else {
                 Log.i(TAG, "Starting bt advertisement");
 
-                mBluetoothController.advertiseIp(Util.getIpAddress() +":"+MainActivity.PORT);
-
+                try {
+                    mBluetoothController.listenForConnections();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent();
-                intent.setAction(ACTION_BT_ADVERTISING_START);
+                intent.setAction(ACTION_BT_LISTENING_START);
                 sendBroadcast(intent);
             }
         }
@@ -63,7 +65,6 @@ public class BleAdvertisementService extends Service {
 
     @Override
     public void onDestroy() {
-        mBluetoothController.stopAdvertising();
         Toast.makeText(this, "BLE service Stopped", Toast.LENGTH_LONG).show();
         Log.d(TAG, "onDestroy");
     }

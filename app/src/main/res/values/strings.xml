@@ -6,5 +6,8 @@
     <string name="local_service_started">NanoHttpdService Started</string>
     <string name="notification_title">REST Server</string>
     <string name="notification_running_desc">Service is running</string>
+    <string name="pref_webserver_port_title">Web Server Port</string>
+    <string name="pref_webserver_port_default_value">8765</string>
+    <string name="pref_webserver_port_key">webserver_port</string>
 
 </resources>

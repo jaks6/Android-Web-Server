@@ -58,6 +58,26 @@
             android:layout_below="@+id/btn_ble_start"
             android:onClick = "buttonStopBleAdvertisingClicked"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="read BLE"
+            android:id="@+id/btn_read_ble"
+            android:layout_centerVertical="true"
+            android:onClick = "buttonReadBleAdvertisingClicked"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BT Server"
+            android:id="@+id/btn_bt_server"
+            android:onClick="buttonStartBluetoothServer"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 </RelativeLayout>
