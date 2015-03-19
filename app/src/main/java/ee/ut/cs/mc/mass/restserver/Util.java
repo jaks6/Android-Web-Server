@@ -1,5 +1,8 @@
 package ee.ut.cs.mc.mass.restserver;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.ParcelUuid;
 
 import java.net.InetAddress;
@@ -53,6 +56,7 @@ public class Util {
         long lsb = BASE_UUID.getUuid().getLeastSignificantBits();
         return new ParcelUuid(new java.util.UUID(msb, lsb));
     }
+
 
 
 

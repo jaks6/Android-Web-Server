@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ee.ut.cs.mc.mass.restserver.ble.Sensor;
 import fi.iki.elonen.NanoHTTPD;
 
 /**
@@ -18,15 +19,19 @@ import fi.iki.elonen.NanoHTTPD;
 public class RestServer extends NanoHTTPD {
     private static final String URI_SAMPLE_XML = "/xml";
     private static final String URI_REQUEST_INFO = "/request_info";
+    private static final String URI_GET_ALTITUDE = "/altitude";
     private static final String TAG = RestServer.class.getName();
 
     // TODO: Allow the user to configure the base path
     private static String BASE_SERVE_PATH = "";
     private final Context context;
 
+    private Sensor mSensor;
+
     public RestServer(Context context, int port) {
         super(port);
         this.context = context;
+        mSensor = new Sensor(context);
     }
 
     @Override public Response serve(IHTTPSession session) throws FileNotFoundException {
@@ -37,7 +42,9 @@ public class RestServer extends NanoHTTPD {
             // return a HTML page showing details of the request (URI, user agents, params, etc)
             responseBody = getRequestDetailsHtml(session);
 
-
+        }
+        else if (Uri.equals(URI_GET_ALTITUDE)){
+            responseBody = Float.toString(mSensor.getHeight()); //TODO: Move this to some service call instead of using it as a field
         }
         else {
             // DEFAULT behaviour: return file or list directory

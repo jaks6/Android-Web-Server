@@ -21,6 +21,7 @@ public class NanoHttpdService extends Service {
     private NotificationManager mNM;
     private static final int mNotificationId = 001;
 
+
     private RestServer server;
 
     @Override
